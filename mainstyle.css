@@ -7,24 +7,33 @@
     width: 500px;
     height: 300px;
     border-radius: 10px;
-    /* display flex를 쓸 때엔 아래 네 줄이 항상 묶여 다닙니다. */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
 .content {
     width:600px;
     margin: auto;
+    text-align: left;
 }
-.orderBtn {
-    width: 300px;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+
+.content span{
+    display: inline-block;
 }
+
+.content input,.content select {
+    height:30px; 
+    width:300px;
+}
+
+.col-sm-2{
+    font-size:15px;
+    padding : 0px;
+    margin : 0px;
+}
+
+.button-order{
+    text-align: center;
+}
+
+
 * {
-    font-family: 'Nanum Myeongjo', serif;
+	font-family: 'Do Hyeon', sans-serif;
 }
