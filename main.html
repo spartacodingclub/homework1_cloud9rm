@@ -26,6 +26,24 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 
+    <!-- 자바스크립트-->
+    <script>
+        function checkBlank(){
+            if($('#input-name').val()==''){
+                alert('성함을 입력하세요!');
+                $('#input-name').focus()
+            }
+            else if($('#input-address').val()==''){
+                alert('주소를 입력하세요!');
+                $('#input-address').focus()
+            }
+            else if($('#input-pnum').val()==''){
+                alert('전화번호를 입력하세요!');
+                $('#input-pnum').focus()
+            }
+        }
+    </script>
+
 </head>
 
 <body>
@@ -59,23 +77,24 @@
         </div>
 
         <div class="form-group row">
-            <label for="input-name" class="col-sm-2">주소 : </label>
+            <label for="input-address" class="col-sm-2">주소 : </label>
             <div class="col-sm-10">
-                <input type="text" id="input-name">
+                <input type="text" id="input-address">
             </div>
         </div>
 
         <div class="form-group row">
-            <label for="input-name" class="col-sm-2">전화번호 : </label>
+            <label for="input-pnum" class="col-sm-2">전화번호 : </label>
             <div class="col-sm-10">
-                <input type="text" id="input-name">
+                <input type="text" id="input-pnum">
             </div>
         </div>
 
         <div class="button-order">
-            <button type="submit" class="btn btn-primary mb-2">주문하기</button>
+            <button type="submit" class="btn btn-primary mb-2" onclick="checkBlank()">주문하기</button>
         </div>
     </div>
 
 </body>
+
 </html>
