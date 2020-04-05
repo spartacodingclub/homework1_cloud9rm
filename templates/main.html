@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Webpage Title -->
+    <title>Homework1</title>
+    <!-- css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='/mainstyle.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
+
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <!-- 자바스크립트-->
+    <script>
+
+         $(document).ready(function () {
+            $('#orders-box').html('');
+            listing();
+        });
+
+
+
+        function checkBlank() {
+            if ($('#input-name').val() == '') {
+                alert('성함을 입력하세요!');
+                $('#input-name').focus()
+                return false;
+            }
+            else if ($('#input-address').val() == '') {
+                alert('주소를 입력하세요!');
+                $('#input-address').focus()
+                return false;
+            }
+            else if ($('#input-pnum').val() == '') {
+                alert('전화번호를 입력하세요!');
+                $('#input-pnum').focus()
+                return false;
+            }
+            //make_orderlist();
+            return true;
+        }
+
+        function make_orderlist() {
+            // 1. 제목, 저자, 리뷰 내용을 가져옵니다.
+            console.log('make_orderlist 실행')
+            let name = $('#input-name').val();
+            let quantity = $('#input-quantity').val();
+            let address = $('#input-address').val();
+            let pnum = $('#input-pnum').val();
+
+            if (checkBlank() == false) {
+                return;
+            }
+
+            // 2. 제목, 저자, 리뷰 중 하나라도 입력하지 않았을 경우 alert를 띄웁니다.
+            // 3. POST /reviews 에 저장을 요청합니다.
+            $.ajax({
+                type: "POST",
+                url: "/orderlist",
+                data: { name_give: name, quantity_give: quantity, address_give: address, pnum_give: pnum },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert(response['msg']);
+                        // $('#input-name').val('');
+                        // $('#input-quantity').trigger('1');
+                        // $('#input-address').val('');
+                        // $('#input-pnum').val('');
+                        window.location.reload();
+                    }
+                }
+            })
+
+            console.log('ssss')
+        }
+
+
+
+
+        function listing() {
+            // 1. 리뷰 목록을 서버에 요청하기
+            // 2. 요청 성공 여부 확인하기
+            // 3. 요청 성공했을 때 리뷰를 올바르게 화면에 나타내기
+            $.ajax({
+                type: "GET",
+                url: "/orderlist",
+                data: {},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        let orderinfo = response['orderinfo'];
+                        console.log(orderinfo)
+                        // 2. 성공했을 때 리뷰를 올바르게 화면에 나타내기
+                        for (let i = 0; i < orderinfo.length; i++) {
+                            make_card(orderinfo[i]['name'], orderinfo[i]['quantity'], orderinfo[i]['address'], orderinfo[i]['pnum']);
+                        }
+                    } else {
+                        alert('리뷰를 받아오지 못했습니다');
+                    }
+                }
+            });
+        }
+
+
+
+        function make_card(name, quantity, address, pnum) {
+            let temp_html = '<tr>\
+                                <td>'+ name + '</td>\
+                                <td>'+ quantity + '</td>\
+                                <td>'+ address + '</td>\
+                                <td>'+ pnum + '</td>\
+                            </tr>';
+            $('#orders-box').append(temp_html);
+        }
+    </script>
+
+</head>
+
+<body>
+    <div class="picture"></div>
+
+    <div class="content">
+        <span>
+            <h3>침대</h3>
+        </span><span>&nbsp&nbsp&nbsp가격: 1,300,000원/개</span>
+        <p>세계 최초 5세대 스마트폼, No.1 메모리폼 매트리스, 친환경 침대매트리스입니다.</p>
+        <h3>주문하기</h3>
+
+        <div class="form-group row">
+            <label for="input-name" class="col-sm-2">주문자 성함 : </label>
+            <div class="col-sm-10">
+                <input type="text" id="input-name">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="input-quantity" class="col-sm-2">수량 : </label>
+            <div class="col-sm-10">
+                <select id="input-quantity">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="input-address" class="col-sm-2">주소 : </label>
+            <div class="col-sm-10">
+                <input type="text" id="input-address">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="input-pnum" class="col-sm-2">전화번호 : </label>
+            <div class="col-sm-10">
+                <input type="text" id="input-pnum">
+            </div>
+        </div>
+
+        <div class="button-order">
+            <button type="submit" class="btn btn-primary mb-2" onclick="make_orderlist()">주문하기</button>
+        </div>
+    </div>
+
+    <div class="orders">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="meta_info" scope="col">주문자 성함</th>
+                    <th class="meta_info" scope="col">수량</th>
+                    <th class="meta_info" scope="col">주소</th>
+                    <th scope="col">전화번호</th>
+                </tr>
+            </thead>
+            <tbody id="orders-box">
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
